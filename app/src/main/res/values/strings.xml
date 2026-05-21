@@ -1,0 +1,66 @@
+<resources>
+
+    <string name="app_name">Weather App</string>
+
+    <string name="coordinates_label">
+        Latitude, Longitude
+    </string>
+
+    <string name="coordinates_placeholder">
+        40.7128, -74.0060
+    </string>
+
+    <string name="go">
+        Go
+    </string>
+
+    <string name="coordinates_description">
+        Tired of getting caught in the rain without an umbrella? ☔
+        This app checks whether it is raining based on the latitude
+        and longitude you enter. Enter coordinates to see where it
+        might be raining.
+    </string>
+
+    <string name="empty_fields_error">
+        Fields are empty. Please enter latitude and longitude.
+    </string>
+
+    <string name="invalid_format_error">
+        Invalid format. Use: lat, lon
+        (example: 40.71, -74.00)
+    </string>
+
+    <string name="invalid_number_error">
+        Invalid numbers. Please enter valid coordinates.
+    </string>
+
+    <string name="generic_error">
+        Something went wrong. Please try again.
+    </string>
+
+    <string name="raining">
+    It is raining 🌧️
+</string>
+
+    <string name="not_raining">
+    It is not raining ☀️
+</string>
+
+    <string name="back_button">
+    Back
+</string>
+
+    <string name="coordinates_result">
+    Coordinates:
+    %1$.2f, %2$.2f
+</string>
+
+    <string name="rain_screen_description">
+    Here is your answer. Select the back arrow above to return and enter more coordinates.
+</string>
+
+    <string name="invalid_coordinate_range_error">
+    Coordinates are out of bounds. Latitude must be -90 to 90 and longitude must be -180 to 180.
+</string>
+
+</resources>
