@@ -36,16 +36,15 @@ fun CoordinatesScreen(
     var coordinatesInput by remember { mutableStateOf("") }
 
     val state = viewModel.state.value
+    val isLoading = state.isLoading
+    val error = state.error
+    val isRaining = state.isRaining
     val navigateCoord = viewModel.navigateToRain.value
-
-    LaunchedEffect(Unit) {
-        viewModel.clearCoordinates()
-    }
 
     LaunchedEffect(navigateCoord) {
         navigateCoord?.let { coord ->
 
-            if (!state.isLoading && state.error == null && state.isRaining != null) {
+            if (!isLoading && error == null && isRaining != null) {
 
                 navController.navigate(
                     "rain_screen/${coord.lat}/${coord.lon}"
@@ -92,7 +91,7 @@ fun CoordinatesScreen(
                         Text(stringResource(R.string.coordinates_placeholder))
                     },
                     singleLine = true,
-                    enabled = !state.isLoading,
+                    enabled = !isLoading,
                     modifier = Modifier.weight(1f)
                 )
 
@@ -102,20 +101,20 @@ fun CoordinatesScreen(
                     onClick = {
                         viewModel.onCoordinatesEntered(input = coordinatesInput)
                     },
-                    enabled = !state.isLoading
+                    enabled = !isLoading
                 ) {
                     Text(text = stringResource(R.string.go))
                 }
             }
 
-            if (state.isLoading) {
+            if (isLoading) {
                 Spacer(modifier = Modifier.height(16.dp))
                 CircularProgressIndicator()
             }
 
             Spacer(modifier = Modifier.height(12.dp))
 
-            state.error?.let { errorResId ->
+            error?.let { errorResId ->
                 Text(
                     text = stringResource(id = errorResId),
                     color = MaterialTheme.colorScheme.error,

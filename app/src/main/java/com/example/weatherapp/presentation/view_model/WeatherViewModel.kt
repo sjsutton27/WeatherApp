@@ -17,10 +17,12 @@ class WeatherViewModel(
 
     private val _state = mutableStateOf(CoordinatesState())
     val state: State<CoordinatesState> = _state
-
-    // ✅ navigation event (fixes double click issue)
     private val _navigateToRain = mutableStateOf<Coord?>(null)
     val navigateToRain: State<Coord?> = _navigateToRain
+
+    init {
+        clearCoordinates()
+    }
 
     fun checkRainStatus(lat: Float, lon: Float) {
 
@@ -35,7 +37,7 @@ class WeatherViewModel(
 
                 is Resource.Success -> {
 
-                    val coord = Coord(lat, lon)
+                    val coord = Coord(lat = lat, lon = lon)
 
                     _state.value = _state.value.copy(
                         coordinates = coord,
@@ -44,7 +46,6 @@ class WeatherViewModel(
                         error = null
                     )
 
-                    // ✅ trigger navigation ONLY when data is ready
                     _navigateToRain.value = coord
                 }
 
@@ -70,40 +71,44 @@ class WeatherViewModel(
 
         _state.value = _state.value.copy(error = null)
 
-        if (input.isBlank()) {
-            _state.value = _state.value.copy(
-                error = R.string.empty_fields_error
-            )
-            return
-        }
+        val (lat, lon, error) =
+            validateCoordinates(input)
 
-        val parts = input.split(", ")
-
-        if (parts.size != 2) {
-            _state.value = _state.value.copy(
-                error = R.string.invalid_format_error
-            )
-            return
-        }
-
-        val lat = parts[0].trim().toFloatOrNull()
-        val lon = parts[1].trim().toFloatOrNull()
-
-        if (lat == null || lon == null) {
-            _state.value = _state.value.copy(
-                error = R.string.invalid_number_error
-            )
-            return
-        }
-
-        if (lat !in -90f..90f || lon !in -180f..180f) {
-            _state.value = _state.value.copy(
-                error = R.string.invalid_coordinate_range_error
-            )
+        if (error != null) {
+            _state.value = _state.value.copy(error = error)
             return
         }
 
         checkRainStatus(lat, lon)
+    }
+
+    private fun validateCoordinates(
+        input: String
+    ): Triple<Float, Float, Int?> {
+
+        val parts = input.split(", ")
+
+        val lat = parts.getOrNull(index = 0)?.trim()?.toFloatOrNull()
+        val lon = parts.getOrNull(index = 1)?.trim()?.toFloatOrNull()
+
+        val error = when {
+            input.isBlank() ->
+                R.string.empty_fields_error
+
+            parts.size != 2 ->
+                R.string.invalid_format_error
+
+            lat == null || lon == null ->
+                R.string.invalid_number_error
+
+            lat !in -90f..90f ||
+                    lon !in -180f..180f ->
+                R.string.invalid_coordinate_range_error
+
+            else -> null
+        }
+
+        return Triple(lat ?: 0f, lon ?: 0f, error)
     }
 
     fun clearCoordinates() {

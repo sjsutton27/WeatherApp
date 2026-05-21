@@ -1,0 +1,24 @@
+package com.example.weatherapp.di
+
+import android.content.Context
+import com.example.weatherapp.common.Constants.BASE_URL
+import com.example.weatherapp.data.api.WeatherApi
+import com.example.weatherapp.data.repository.WeatherRepository
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+
+internal class AppModuleImpl(
+    private val appContext: Context
+): AppModule{
+    override val weatherApi: WeatherApi by lazy{
+        Retrofit.Builder()
+            .baseUrl(BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+            .create(WeatherApi::class.java)
+    }
+    override val weatherRepository: WeatherRepository by lazy{
+        WeatherRepository(api = weatherApi)
+    }
+
+}

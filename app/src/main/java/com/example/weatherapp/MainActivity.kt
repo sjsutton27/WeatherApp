@@ -36,7 +36,7 @@ fun WeatherNavGraph() {
         startDestination = "coordinates_screen"
     ) {
 
-        composable("coordinates_screen") {
+        composable(route = "coordinates_screen") {
             CoordinatesScreen(
                 navController = navController,
             )
@@ -45,8 +45,8 @@ fun WeatherNavGraph() {
         composable(
             route = "rain_screen/{lat}/{lon}",
             arguments = listOf(
-                navArgument("lat") { type = NavType.FloatType },
-                navArgument("lon") { type = NavType.FloatType }
+                navArgument(name = "lat") { type = NavType.FloatType },
+                navArgument(name = "lon") { type = NavType.FloatType }
             )
         ) { backStackEntry ->
 
@@ -55,7 +55,7 @@ fun WeatherNavGraph() {
 
             RainScreen(
                 navController = navController,
-                coord = Coord(lat, lon)
+                coord = Coord(lat = lat, lon = lon)
             )
         }
     }

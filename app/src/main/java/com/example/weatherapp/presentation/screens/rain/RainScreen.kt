@@ -44,10 +44,25 @@ fun RainScreen(
 
     val state = viewModel.state.value
 
-    val backgroundColor =
-        if (state.isRaining == true) RainColor else SunnyColor
+    val isLoading = state.isLoading
+    val error = state.error
+    val isRaining = state.isRaining == true
 
-    // run API call once
+    val backgroundColor =
+        if (isRaining) RainColor else SunnyColor
+
+    val weatherImage =
+        if (isRaining)
+            R.drawable.rain_image
+        else
+            R.drawable.sunny_image
+
+    val weatherText =
+        if (isRaining)
+            stringResource(R.string.raining)
+        else
+            stringResource(R.string.not_raining)
+
     LaunchedEffect(Unit) {
         viewModel.checkRainStatus(coord.lat, coord.lon)
     }
@@ -65,7 +80,7 @@ fun RainScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .statusBarsPadding()
-                .padding(16.dp)
+                .padding(all = 16.dp)
         ) {
 
             IconButton(
@@ -75,7 +90,7 @@ fun RainScreen(
             ) {
                 Icon(
                     imageVector = Icons.Default.ArrowBack,
-                    contentDescription = stringResource(R.string.back_button)
+                    contentDescription = stringResource(id = R.string.back_button)
                 )
             }
 
@@ -88,11 +103,7 @@ fun RainScreen(
             ) {
 
                 Image(
-                    painter = if(state.isRaining == true){
-                        painterResource(R.drawable.rain_image)
-                    }else{
-                        painterResource(R.drawable.sunny_image)
-                    },
+                    painter = painterResource(weatherImage),
                     contentDescription = "Rain illustration",
                     modifier = Modifier.size(160.dp)
                 )
@@ -108,13 +119,24 @@ fun RainScreen(
                 Spacer(modifier = Modifier.height(16.dp))
 
                 Text(
-                    text = if (state.isRaining == true)
-                        stringResource(R.string.raining)
-                    else
-                        stringResource(R.string.not_raining),
+                    text = weatherText,
                     style = MaterialTheme.typography.headlineMedium,
                     textAlign = TextAlign.Center
                 )
+
+                if (isLoading) {
+                    Spacer(modifier = Modifier.height(16.dp))
+                    CircularProgressIndicator()
+                }
+
+                error?.let {
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    Text(
+                        text = stringResource(it),
+                        color = MaterialTheme.colorScheme.error
+                    )
+                }
 
                 Spacer(modifier = Modifier.height(24.dp))
 
