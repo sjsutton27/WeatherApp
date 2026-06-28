@@ -59,9 +59,9 @@ fun RainScreen(
 
     val weatherText =
         if (isRaining)
-            stringResource(R.string.raining)
+            stringResource(id = R.string.raining)
         else
-            stringResource(R.string.not_raining)
+            stringResource(id = R.string.not_raining)
 
     LaunchedEffect(Unit) {
         viewModel.checkRainStatus(coord.lat, coord.lon)
@@ -94,7 +94,7 @@ fun RainScreen(
                 )
             }
 
-            Spacer(modifier = Modifier.height(40.dp))
+            Spacer(modifier = Modifier.height(height = 40.dp))
 
             Column(
                 modifier = Modifier.fillMaxSize(),
@@ -103,12 +103,12 @@ fun RainScreen(
             ) {
 
                 Image(
-                    painter = painterResource(weatherImage),
+                    painter = painterResource(id = weatherImage),
                     contentDescription = "Rain illustration",
-                    modifier = Modifier.size(160.dp)
+                    modifier = Modifier.size(size = 160.dp)
                 )
 
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(height = 16.dp))
 
                 Text(
                     text = "Lat: ${coord.lat}, Lon: ${coord.lon}",
@@ -116,7 +116,7 @@ fun RainScreen(
                     textAlign = TextAlign.Center
                 )
 
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(height = 16.dp))
 
                 Text(
                     text = weatherText,
@@ -125,23 +125,23 @@ fun RainScreen(
                 )
 
                 if (isLoading) {
-                    Spacer(modifier = Modifier.height(16.dp))
+                    Spacer(modifier = Modifier.height(height = 16.dp))
                     CircularProgressIndicator()
                 }
 
-                error?.let {
-                    Spacer(modifier = Modifier.height(16.dp))
+                error?.let { error ->
+                    Spacer(modifier = Modifier.height(height = 16.dp))
 
                     Text(
-                        text = stringResource(it),
+                        text = stringResource(id = error),
                         color = MaterialTheme.colorScheme.error
                     )
                 }
 
-                Spacer(modifier = Modifier.height(24.dp))
+                Spacer(modifier = Modifier.height(height = 24.dp))
 
                 Text(
-                    text = stringResource(R.string.rain_screen_description),
+                    text = stringResource(id = R.string.rain_screen_description),
                     style = MaterialTheme.typography.bodyMedium,
                     textAlign = TextAlign.Center
                 )
